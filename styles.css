@@ -1,0 +1,16 @@
+.apply{
+        padding: 1% 10% 0px 10%;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+          url("./Assets/photo-1564981797816-1043664bf78d.avif");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        /* height: 100rem; */
+    margin-bottom: 10%;
+    color: aliceblue;
+}
+
+.order {
+    border-radius: 0;
+    border: 5px solid;
+  }
