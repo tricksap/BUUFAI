@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<!-- saved from url=(0040)https://journal.bicol-u.edu.ph/login.php -->
+<html
+  lang="en"
+  class="light-style customizer-hide"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="assets/"
+  data-template="vertical-menu-template-free"
+>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Register</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://journal.bicol-u.edu.ph/assets/img/favicon/favicon.ico"
+    />
+
+    <!-- Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com/" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+
+    <link href="./Registration_files/css2" rel="stylesheet" />
+
+    <!-- Icons. Uncomment required icon fonts -->
+
+    <link rel="stylesheet" href="./Registration_files/boxicons.css" />
+
+    <!-- Core CSS -->
+
+    <link
+      rel="stylesheet"
+      href="./Registration_files/core.css"
+      class="template-customizer-core-css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="./Registration_files/theme-default.css"
+      class="template-customizer-theme-css"
+    />
+
+    <link rel="stylesheet" href="./Registration_files/demo.css" />
+
+    <!-- Vendors CSS -->
+
+    <link rel="stylesheet" href="./Registration_files/perfect-scrollbar.css" />
+
+    <link rel="stylesheet" href="./Registration_files/sweetalert2.css" />
+
+    <!-- Page CSS -->
+
+    <!-- Page -->
+
+    <link rel="stylesheet" href="./Registration_files/page-auth.css" />
+
+    <!-- Helpers -->
+
+    <script type="text/javascript">
+      function check() {
+        var email_x = document.getElementById("email").value;
+        filter =
+          /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if (filter.test(email.value)) {
+          document.getElementById("email").style.border = "3px solid green";
+          return true;
+        } else {
+          document.getElementById("email").style.border = "3px solid red";
+          return false;
+        }
+      }
+    </script>
+
+    <script src="./Registration_files/helpers.js.download"></script>
+    <style type="text/css">
+      .layout-menu-fixed .layout-navbar-full .layout-menu,
+      .layout-page {
+        padding-top: 0px !important;
+      }
+      .content-wrapper {
+        padding-bottom: 0px !important;
+      }
+    </style>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+
+    <script src="./Registration_files/config.js.download"></script>
+  </head>
+
+  <body data-new-gr-c-s-check-loaded="14.1095.0" data-gr-ext-installed="">
+    <!-- Content -->
+
+    <div class="container-xxl">
+      <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
+          <!-- Register -->
+
+          <div class="card">
+            <div class="card-body">
+              <!-- Logo -->
+
+              <div class="app-brand justify-content-center">
+                <a
+                  href="https://journal.bicol-u.edu.ph/index.php"
+                  class="app-brand-link gap-2"
+                >
+                  <span class="app-brand-logo demo">
+                    <img
+                      src="./Registration_files/bu-logo.webp"
+                      alt=""
+                      class="img-fluid"
+                      width="300"
+                    />
+                  </span>
+                </a>
+              </div>
+
+              <!-- /Logo -->
+
+              <h4 class="mb-2">BUUFIA</h4>
+
+              <p class="mb-4">Create an Account</p>
+
+              <form
+                id="formAuthentication"
+                class="mb-3"
+                action="/"
+                method="POST"
+                data-bitwarden-watching="1"
+              >
+                <div class="mb-3">
+                  <div class="row">
+                    <div class="col">
+                      <label for="email" class="form-label">First Name</label>
+
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="firstname"
+                        name="firstname"
+                        placeholder="firstname"
+                        autofocus=""
+                        required=""
+                      />
+                    </div>
+                    <div class="col">
+                      <label for="email" class="form-label">Middle Name</label>
+
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="middlename"
+                        name="middlename"
+                        placeholder="middlename"
+                        autofocus=""
+                        required=""
+                      />
+                    </div>
+                    <div class="col">
+                      <label for="email" class="form-label">Last Name</label>
+
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="lastname"
+                        name="lastname"
+                        placeholder="lastname"
+                        autofocus=""
+                        required=""
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email</label>
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    placeholder="email"
+                    autofocus=""
+                    required=""
+                    onchange="check()"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="email" class="form-label">College</label>
+
+                  <select name="college" class="form-control" id="College">
+                    <option>CENG</option>
+                    <option>CIT</option>
+                    <option>CS</option>
+                    <option>CN</option>
+                    <option>CM</option>
+                  </select>
+                </div>
+
+                <div class="mb-3 form-password-toggle">
+                  <div class="d-flex justify-content-between">
+                    <label class="form-label" for="password">Password</label>
+                  </div>
+
+                  <div class="input-group input-group-merge">
+                    <input
+                      type="password"
+                      id="password"
+                      class="form-control"
+                      name="password"
+                      placeholder="············"
+                      aria-describedby="password"
+                      required=""
+                    />
+
+                    <span class="input-group-text cursor-pointer"
+                      ><i class="bx bx-hide"></i
+                    ></span>
+                  </div>
+                </div>
+
+                <div class="mb-3 form-password-toggle">
+                  <div class="d-flex justify-content-between">
+                    <label class="form-label" for="password">
+                      Confirm Password</label
+                    >
+                  </div>
+
+                  <div class="input-group input-group-merge">
+                    <input
+                      type="confirmPassword"
+                      id="confirmPassword"
+                      class="form-control"
+                      name="confirmPassword"
+                      placeholder="············"
+                      aria-describedby="password"
+                      required=""
+                    />
+
+                    <span class="input-group-text cursor-pointer"
+                      ><i class="bx bx-hide"></i
+                    ></span>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <button
+                    class="btn btn-primary d-grid w-100"
+                    name="submit"
+                    type="submit"
+                  >
+                    Create An Account
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- /Register -->
+        </div>
+      </div>
+    </div>
+
+    <!-- / Content -->
+
+    <!-- Core JS -->
+
+    <!-- build:js assets/vendor/js/core.js -->
+
+    <script src="./Registration_files/jquery.js.download"></script>
+
+    <script src="./Registration_files/popper.js.download"></script>
+
+    <script src="./Registration_files/bootstrap.js.download"></script>
+
+    <script src="./Registration_files/perfect-scrollbar.js.download"></script>
+
+    <script src="./Registration_files/menu.js.download"></script>
+
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+
+    <script src="./Registration_files/sweetalert2.js.download"></script>
+
+    <!-- Main JS -->
+
+    <script src="./Registration_files/main.js.download"></script>
+
+    <!-- Page JS -->
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+
+    <script
+      async=""
+      defer=""
+      src="./Registration_files/buttons.js.download"
+    ></script>
+  </body>
+  <grammarly-desktop-integration
+    data-grammarly-shadow-root="true"
+  ></grammarly-desktop-integration>
+</html>
