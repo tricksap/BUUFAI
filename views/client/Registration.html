@@ -106,11 +106,10 @@
   <body data-new-gr-c-s-check-loaded="14.1095.0" data-gr-ext-installed="">
     <!-- Content -->
 
-    <div class="container-xxl">
-      <div class="authentication-wrapper authentication-basic container-p-y">
-        <div class="authentication-inner">
-          <!-- Register -->
-
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <!-- Basic Layout -->
+      <div class="row">
+        <div class="col-xl">
           <div class="card">
             <div class="card-body">
               <!-- Logo -->
@@ -132,11 +131,9 @@
               </div>
 
               <!-- /Logo -->
-
               <h4 class="mb-2">BUUFIA</h4>
 
               <p class="mb-4">Create an Account</p>
-
               <form
                 id="formAuthentication"
                 class="mb-3"
@@ -188,31 +185,68 @@
                   </div>
                 </div>
 
-                <div class="mb-3">
-                  <label for="email" class="form-label">Email</label>
+                <div class="row">
+                  <div class="form-group col">
+                    <label for="gender" class="form-label">Gender</label>
 
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="email"
-                    name="email"
-                    placeholder="email"
-                    autofocus=""
-                    required=""
-                    onchange="check()"
-                  />
+                    <select name="gender" class="form-control" id="gender">
+                      <option>Male</option>
+                      <option>Female</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-4">
+                    <label for="birthday" class="form-label">Birthday</label>
+
+                    <input
+                      class="form-control"
+                      type="date"
+                      placeholder="2021-06-18"
+                      id="birthday"
+                      name="birthday"
+                    />
+                  </div>
+                  <div class="mb-3 col">
+                    <label for="phoneNumber" class="form-label"
+                      >Phone Number</label
+                    >
+
+                    <input
+                      type="tel"
+                      class="form-control"
+                      id="phoneNumber"
+                      name="phoneNumber"
+                      placeholder="09123456789"
+                      required=""
+                    />
+                  </div>
                 </div>
 
-                <div class="form-group">
-                  <label for="email" class="form-label">College</label>
+                <div class="row">
+                  <div class="form-group col">
+                    <label for="college" class="form-label">College</label>
 
-                  <select name="college" class="form-control" id="College">
-                    <option>CENG</option>
-                    <option>CIT</option>
-                    <option>CS</option>
-                    <option>CN</option>
-                    <option>CM</option>
-                  </select>
+                    <select name="college" class="form-control" id="College">
+                      <option>CENG</option>
+                      <option>CIT</option>
+                      <option>CS</option>
+                      <option>CN</option>
+                      <option>CM</option>
+                    </select>
+                  </div>
+                  <div class="mb-3 col">
+                    <label for="email" class="form-label">Email</label>
+
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="email"
+                      name="email"
+                      placeholder="email"
+                      autofocus=""
+                      required=""
+                      onchange="check()"
+                    />
+                  </div>
                 </div>
 
                 <div class="mb-3 form-password-toggle">
@@ -273,12 +307,9 @@
               </form>
             </div>
           </div>
-
-          <!-- /Register -->
         </div>
       </div>
     </div>
-
     <!-- / Content -->
 
     <!-- Core JS -->

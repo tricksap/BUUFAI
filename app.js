@@ -24,8 +24,17 @@ con.connect(function (err) {
 
 app.post("/", (req, res) => {
   console.log(req.body);
-  const { email, firstname, middlename, lastname, college, password } =
-    req.body;
+  const {
+    email,
+    firstname,
+    middlename,
+    lastname,
+    college,
+    password,
+    gender,
+    birthday,
+    phoneNumber,
+  } = req.body;
   let q = "INSERT INTO user SET ?";
   let d = {
     email: email,
@@ -34,6 +43,9 @@ app.post("/", (req, res) => {
     lastname: lastname,
     college: college,
     password: password,
+    gender: gender,
+    birthday: birthday,
+    phoneNumber: phoneNumber,
   };
   console.log(q);
   con.query(q, d, (err, result) => {
@@ -47,12 +59,16 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/client/BUUFAI.html");
 });
 
-app.get("/Register", (req, res) => {
+app.get("/register", (req, res) => {
   res.sendFile(__dirname + "/views/client/Registration.html");
 });
 
 app.get("/dashboard", (req, res) => {
-  res.sendFile(__dirname + "/views/admin/index.html");
+  res.sendFile(__dirname + "/views/admin/Dashboard.html");
+});
+
+app.get("/unverifiedUser", (req, res) => {
+  res.sendFile(__dirname + "/views/admin/Unverified.html");
 });
 
 app.listen(port, () => {
