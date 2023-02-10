@@ -11,14 +11,19 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 
 app.use(express.json());
+app.use(cookieParser());
 
-const { generateAccessToken } = require("./Helper/JWT");
+const {
+  generateAccessToken,
+  validateToken,
+  checkRole,
+} = require("./Helper/JWT");
 
 app.use(express.static("public/"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.set("view engine", "ejs");
-app.set("views", ["./views/admin", "./views/client"]);
+app.set("views", ["./views/admin", "./views/client", "./views/partials"]);
 
 let con = mysql.createConnection({
   host: "localhost",
@@ -60,7 +65,7 @@ app.post("/", (req, res) => {
   con.query(query, data, (err, result) => {
     if (err) throw err;
     console.log(result);
-    res.send("asd");
+    res.render("AfterRegister");
   });
 });
 app.post("/verifyUser", (req, res) => {
@@ -81,8 +86,18 @@ app.get("/register", (req, res) => {
   res.sendFile(__dirname + "/views/client/Registration.html");
 });
 
-app.get("/dashboard", (req, res) => {
-  res.sendFile(__dirname + "/views/admin/Dashboard.html");
+app.get(
+  "/dashboard",
+  validateToken,
+  checkRole(["Super_Admin", "Admin"]),
+
+  (req, res) => {
+    res.render("Dashboard");
+  }
+);
+
+app.get("/HomeDashboard", validateToken, (req, res) => {
+  res.render("Dashboard_Client");
 });
 
 app.get("/login", (req, res) => {
@@ -115,16 +130,75 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.get("/unverifiedUser", (req, res) => {
+app.get("/loginAdmin", (req, res) => {
+  res.render("Login_Admin", { errormessage: "" });
+});
+
+app.post("/loginAdmin", (req, res) => {
+  let query = "SELECT * FROM buufia.admin Where	Email =? and Password = ?";
+  let data = [req.body.email, req.body.password];
+  con.query(query, data, (err, result) => {
+    if (err) throw err;
+    if (result.length === 0) {
+      res.render("Login", { errormessage: "Account Does Not Exist" });
+    } else {
+      console.log(result);
+      let token = generateAccessToken({
+        id: result[0].Id,
+        role: result[0].Role,
+      });
+      res.cookie("jwt", token, {
+        httpOnly: true,
+        maxAge: 3 * 24 * 60 * 60 * 1000,
+      });
+
+      res.redirect("/dashboard");
+    }
+  });
+});
+
+app.get(
+  "/unverifiedUser",
+  validateToken,
+  checkRole(["Super_Admin"]),
+  (req, res) => {
+    console.log(res.locals.sample);
+    let users;
+    let query =
+      "SELECT Id,Email,Firstname,Middlename,Lastname,College,Verified,Gender,Birthday,PhoneNumber FROM buufia.user Where Verified = 0;";
+
+    con.query(query, (err, result) => {
+      if (err) throw err;
+      users = result;
+      res.render("Unverified", { users });
+    });
+  }
+);
+
+app.get("/Users", validateToken, checkRole(["Super_Admin"]), (req, res) => {
+  console.log(res.locals.sample);
   let users;
   let query =
-    "SELECT Id,Email,Firstname,Middlename,Lastname,College,Verified,Gender,Birthday,PhoneNumber FROM buufia.user Where Verified = 0;";
+    "SELECT Id,Email,Firstname,Middlename,Lastname,College,Verified,Gender,Birthday,PhoneNumber FROM buufia.user";
 
   con.query(query, (err, result) => {
     if (err) throw err;
     users = result;
     res.render("Unverified", { users });
   });
+});
+
+app.get("/profile", validateToken, (req, res) => {
+  console.log(res.locals.userID);
+  res.render("Profile", { errormessage: "" });
+});
+
+app.get("/files", validateToken, (req, res) => {
+  res.render("fileUpload", { errormessage: "" });
+});
+
+app.post("/sample", (req, res) => {
+  console.log(req.body);
 });
 
 app.listen(port, () => {
