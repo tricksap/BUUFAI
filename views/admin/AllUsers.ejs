@@ -100,7 +100,6 @@
                         <th>Contact Number</th>
                         <th>College</th>
                         <th>Verified</th>
-                        <th>Verify User</th>
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
@@ -119,85 +118,21 @@
                         <td><%=user.PhoneNumber%></td>
                         <td><%=user.College%></td>
                         <td>
-                          <span class="badge bg-label-warning me-1"
-                            >Unverified</span
-                          >
+
+                          <% if(user.Verified === 1){ %>
+                            <span class="badge bg-label-success me-1"
+                            >Verified
+                          </span>
+                          <% } else{ %>  
+                            <span class="badge bg-label-warning me-1"
+                            >Unverified
+                          </span>
+                         <% } %> 
                         </td>
-                        <td>
-                          
-                            <button
-                              type="button"
-                              class="btn btn-primary verify"
-                              data-bs-toggle="modal"
-                              data-bs-target="#modalCenter"
-                              value=<%=user.Id%>
-                            >
-                              <span class="tf-icons bx bx-check"></span>
-                            </button>
                             <%})%>
 
                             <!-- Modal -->
-                            <div
-                              class="modal fade"
-                              id="modalCenter"
-                              tabindex="-1"
-                              style="display: none"
-                              aria-hidden="true"
-                            >
-                              <div
-                                class="modal-dialog modal-dialog-centered"
-                                role="document"
-                              >
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h5
-                                      class="modal-title"
-                                      id="modalCenterTitle"
-                                    >
-                                      Confirm
-                                    </h5>
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="modal"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                  <form
-                                    action="http://localhost:3000/verifyUser"
-                                    method="post"
-                                  >
-                                    <div class="modal-body">
-                                      <div class="row g-2">
-                                        <div class="col mb-0">
-                                          <span>
-                                            Are you sure you want to verify this
-                                            Person
-                                          </span>
-                                          <input type="text" name="id" />
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button
-                                        type="button"
-                                        class="btn btn-outline-secondary"
-                                        data-bs-dismiss="modal"
-                                      >
-                                        Close
-                                      </button>
-                                      <button
-                                        type="submit"
-                                        class="btn btn-primary"
-                                        id="confirm"
-                                      >
-                                        Confirm
-                                      </button>
-                                    </div>
-                                  </form>
-                                </div>
-                              </div>
-                            </div>
+                            
                           </div>
                         </td>
                       </tr>

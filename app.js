@@ -3,8 +3,23 @@ const ejs = require("ejs");
 const bodyParser = require("body-parser");
 const mysql = require("mysql2");
 const path = require("path");
+const multer = require("multer");
 const port = 3000;
 
+//routes
+const UserRoutes = require("./Routes/UserRoutes");
+const FileRoutes = require("./Routes/FilesRoute");
+
+let storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
+  },
+});
+
+const upload = multer({ storage: storage });
 const app = express();
 
 const jwt = require("jsonwebtoken");
@@ -18,6 +33,8 @@ const {
   validateToken,
   checkRole,
 } = require("./Helper/JWT");
+const { compareArrays } = require("./Helper/ArrayCompare");
+const { Insert_A_File_Return_Id, Return_Result } = require("./Helper/SQLQuery");
 
 app.use(express.static("public/"));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -25,7 +42,7 @@ app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.set("views", ["./views/admin", "./views/client", "./views/partials"]);
 
-let con = mysql.createConnection({
+global.con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "root",
@@ -61,20 +78,12 @@ app.post("/", (req, res) => {
     gender: gender,
     birthday: birthday,
     phoneNumber: phoneNumber,
+    Role: "User",
   };
   con.query(query, data, (err, result) => {
     if (err) throw err;
     console.log(result);
     res.render("AfterRegister");
-  });
-});
-app.post("/verifyUser", (req, res) => {
-  console.log(req.body);
-  let query = `UPDATE buufia.user SET Verified = '1' WHERE (Id = ${req.body.id});`;
-  con.query(query, (err, result) => {
-    if (err) throw err;
-    users = result;
-    res.redirect("/unverifiedUser");
   });
 });
 
@@ -157,49 +166,20 @@ app.post("/loginAdmin", (req, res) => {
   });
 });
 
-app.get(
-  "/unverifiedUser",
-  validateToken,
-  checkRole(["Super_Admin"]),
-  (req, res) => {
-    console.log(res.locals.sample);
-    let users;
-    let query =
-      "SELECT Id,Email,Firstname,Middlename,Lastname,College,Verified,Gender,Birthday,PhoneNumber FROM buufia.user Where Verified = 0;";
-
-    con.query(query, (err, result) => {
-      if (err) throw err;
-      users = result;
-      res.render("Unverified", { users });
-    });
-  }
-);
-
-app.get("/Users", validateToken, checkRole(["Super_Admin"]), (req, res) => {
-  console.log(res.locals.sample);
-  let users;
-  let query =
-    "SELECT Id,Email,Firstname,Middlename,Lastname,College,Verified,Gender,Birthday,PhoneNumber FROM buufia.user";
-
-  con.query(query, (err, result) => {
-    if (err) throw err;
-    users = result;
-    res.render("Unverified", { users });
-  });
-});
-
 app.get("/profile", validateToken, (req, res) => {
   console.log(res.locals.userID);
   res.render("Profile", { errormessage: "" });
 });
 
-app.get("/files", validateToken, (req, res) => {
-  res.render("fileUpload", { errormessage: "" });
+app.get("/public/:filename", validateToken, (req, res) => {
+  const filePath = __dirname + "/public/uploads/" + req.params.filename;
+  res.sendFile(filePath);
 });
 
-app.post("/sample", (req, res) => {
-  console.log(req.body);
-});
+
+
+app.use(UserRoutes);
+app.use(FileRoutes);
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
