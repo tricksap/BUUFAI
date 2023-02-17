@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const mysql = require("mysql2");
 const path = require("path");
 const multer = require("multer");
+const methodOverride = require("method-override");
 const port = 3000;
 
 //routes
@@ -27,6 +28,7 @@ const cookieParser = require("cookie-parser");
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(methodOverride("_method"));
 
 const {
   generateAccessToken,
@@ -175,8 +177,6 @@ app.get("/public/:filename", validateToken, (req, res) => {
   const filePath = __dirname + "/public/uploads/" + req.params.filename;
   res.sendFile(filePath);
 });
-
-
 
 app.use(UserRoutes);
 app.use(FileRoutes);

@@ -64,7 +64,7 @@
     />
 
     <!-- Page CSS -->
-    <link rel="stylesheet" href="styles.css" />
+    <!-- <link rel="stylesheet" href="styles.css" /> -->
 
     <!-- Helpers -->
     <script src="../assets/vendor/js/helpers.js"></script>
@@ -100,45 +100,25 @@
                 </div>
                 <div class="col-12">
                   <div class="card">
-                    <h5 class="card-header">Custom file input</h5>
+                    <h5 class="card-header"><%= post.title%></h5>
                     <div
                       class="card-body demo-vertical-spacing demo-only-element"
                     >
                       <form
                         method="POST"
-                        action="/files"
-                        enctype="multipart/form-data"
+                        action="/files?_method=PUT"
                       >
                       <div class="mb-3 ">
-                        <label for="defaultFormControlInput" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="title" placeholder="Title" name="title">
-                        <div>
-                          <label for="exampleFormControlTextarea1" class="form-label">Content</label>
-                          <textarea class="form-control" id="content" rows="3" name="content"></textarea>
-                        </div>
-
-                      </div>
-                        <div class="input-group">
-                          <input
-                            type="file"
-                            class="form-control"
-                            id="inputGroupFile04"
-                            aria-describedby="inputGroupFileAddon04"
-                            aria-label="Upload"
-                            name="file"
-                          />
-
-                          
-                          <button
-                            class="btn btn-outline-primary"
-                            type="submit    "
-                            id="inputGroupFileAddon04"
-                          >
-                            Submit
-                          </button>
-                        </div>
+                    <h5 class="card-title"><%= post.content%></h5>
                         
+                      </div>
+                      <a href="/public/<%= post.file_url%>" class="card-link">Link</a>
+                      <hr class="m-0" />
+                      <h5 class="card-title">posted by</h5>
                     </div>
+
+
+
                 <h5 class="card-header">Who Can Access This File</h5>
 
                     <div class="table-responsive text-nowrap">
@@ -170,9 +150,24 @@
                             <td><%=user.College%></td>
                             
                             <td>
-                              <input type="checkbox" id="vehicle1" name="Selected" value="<%=user.Id%>" checked>
+                              <%if (user.access == '1'){%>
+                                <input type="checkbox" id="vehicle1" name="Selected" value="<%=user.Id%>" checked>
+                                <%}else{%>
+                                <input type="checkbox" id="vehicle1" name="Selected" value="<%=user.Id%>">
+                                <%}%>
+
                                 <%})%>
+                                <button
+                            class="btn btn-outline-primary"
+                            type="submit"
+                            id="inputGroupFileAddon04"
+                            name ='file_Id'
+                            value = "<%= post.file_id%>"
+                          >
+                            Submit
+                          </button>
                             </div>
+                            
                       </form>
 
                   </div>

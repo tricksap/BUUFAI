@@ -1,8 +1,15 @@
 const express = require("express");
 const { validateToken, checkRole } = require("../Helper/JWT");
 const router = express.Router();
+
 const multer = require("multer");
-const { Return_Result } = require("../Helper/SQLQuery");
+const {
+  Return_Result,
+  Insert_A_File_Return_Id,
+} = require("../Helper/SQLQuery");
+const mysql = require("mysql2");
+const path = require("path");
+const { compareArrays } = require("../Helper/ArrayCompare");
 
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -75,6 +82,52 @@ router
   );
 
 router
+  .route("/files")
+  .put(validateToken, checkRole(["Super_Admin", "Admin"]), async (req, res) => {
+    const { Selected, file_Id } = req.body;
+    const dataToUpdate = Selected.map((user_id, index) => [
+      1,
+      user_id,
+      file_Id,
+    ]);
+    console.log(dataToUpdate);
+    // Define the update query
+    const updateQuery =
+      "UPDATE user_files SET access = ?  WHERE user_id = ? AND file_id = ?";
+
+    // Begin the transaction
+    con.beginTransaction((err) => {
+      if (err) {
+        throw err;
+      }
+
+      // Iterate over the data to be updated and execute the update query for each record
+      dataToUpdate.forEach((data) => {
+        con.query(updateQuery, data, (err, result) => {
+          if (err) {
+            return con.rollback(() => {
+              throw err;
+            });
+          }
+
+          console.log(result.affectedRows + " record(s) updated");
+        });
+      });
+      // Commit the transaction
+      con.commit((err) => {
+        if (err) {
+          return con.rollback(() => {
+            throw err;
+          });
+        }
+
+        console.log("Transaction completed successfully");
+      });
+    });
+    res.redirect(req.get("referer"));
+  });
+
+router
   .route("/access")
   .get(validateToken, checkRole(["Super_Admin", "Admin"]), async (req, res) => {
     const result = await Return_Result(`SELECT * FROM buufia.files;`);
@@ -82,11 +135,21 @@ router
   });
 
 router
-  .route("/access/:file_id")
+  .route("/access/:fileId")
   .get(validateToken, checkRole(["Super_Admin", "Admin"]), async (req, res) => {
-    console.log(req.params.file_id);
-    // const result = await Return_Result(`SELECT * FROM buufia.files;`);
-    // res.render("access_specific", { posts: result });
+    console.log(req.params.fileId);
+    const user = await Return_Result(
+      `SELECT Id,Email,Firstname,Middlename,Lastname,College,Verified,Gender,Birthday,PhoneNumber,access FROM buufia.user_files  INNER JOIN  files on user_files.file_id = files.file_id INNER JOIN  user on user_files.user_id = user.Id where user_files.file_id = ${req.params.fileId} and verified =1;`
+    );
+
+    const post = await Return_Result(
+      `SELECT * FROM buufia.files where file_id =${req.params.fileId} ;`
+    );
+    res.render("access_specific", {
+      users: user,
+      errormessage: "",
+      post: post[0],
+    });
   });
 
 //all
