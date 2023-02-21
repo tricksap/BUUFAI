@@ -184,6 +184,12 @@ app.get("/public/:filename", validateToken, (req, res) => {
   res.sendFile(filePath);
 });
 
+app.get("/logout", (req, res) => {
+  // clear the cookie with the name "my_cookie"
+  res.clearCookie("jwt");
+  res.redirect("/");
+});
+
 app.use(UserRoutes);
 app.use(FileRoutes);
 app.use(minutesRoutes);

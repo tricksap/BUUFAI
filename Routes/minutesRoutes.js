@@ -41,6 +41,35 @@ router
   });
 
 router
+  .route("/Minutes_access")
+  .get(validateToken, checkRole(["Super_Admin", "Admin"]), async (req, res) => {
+    const result = await Return_Result(`SELECT * FROM buufia.meeting_minutes;`);
+    res.render("minutesAccess", { posts: result });
+  });
+router
+  .route("/minutes_Access/:meetingId")
+  .get(validateToken, checkRole(["Super_Admin", "Admin"]), async (req, res) => {
+    let message = "";
+    if (req.query.status) {
+      message = "Succesfully Updated";
+    }
+    const user = await Return_Result(
+      `SELECT Id,Email,Firstname,Middlename,Lastname,College,Verified,Gender,Birthday,PhoneNumber,access  FROM buufia.user_meeting_minutes
+        INNER JOIN  user on user.Id = user_meeting_minutes.user_id
+        where meeting_id=${req.params.meetingId} ;`
+    );
+
+    const post = await Return_Result(
+      `SELECT * FROM buufia.meeting_minutes where meeting_id=${req.params.meetingId} ;`
+    );
+    res.render("minutesAccessSpecific", {
+      users: user,
+      errormessage: message,
+      post: post[0],
+    });
+  });
+
+router
   .route("/minutes")
   .post(
     validateToken,
