@@ -16,7 +16,11 @@ let storage = multer.diskStorage({
     cb(null, "public/uploads/");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
+    if (!file) {
+      cb(null, "");
+    } else {
+      cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
+    }
   },
 });
 
@@ -35,7 +39,7 @@ router
       res.render("fileUpload", { users: users, errormessage: "" });
     });
   });
-module.exports = router;
+
 router
   .route("/files")
   .post(
@@ -43,16 +47,26 @@ router
     checkRole(["Super_Admin", "Admin"]),
     upload.single("file"),
     async (req, res) => {
-      const { originalname, filename } = req.file;
+      let originalname1;
+      let filename1;
+      if (!req.file) {
+        originalname1 = "";
+        filename1 = "";
+      } else {
+        const { originalname, filename } = req.file;
+        originalname1 = originalname;
+        filename1 = filename;
+      }
       const { title, content } = req.body;
-
       let users;
-
+      console.log(originalname1);
       //add new file row
       const latestInsertedId = await Insert_A_File_Return_Id(
-        `INSERT INTO files (title, content,file_name, file_url, uploaded_by) VALUES("${title}","${content}","${originalname}", "${filename}", "${res.locals.userID}");`
+        `INSERT INTO files (title, content,file_name, file_url, uploaded_by) VALUES("${title}","${content}","${originalname1}", "${filename1}", "${res.locals.userID}");`
       );
-      let userId = await Return_Result("SELECT Id FROM buufia.user;");
+      let userId = await Return_Result(
+        "SELECT Id FROM buufia.user where verified = 1;"
+      );
       userId = userId.map(function (obj) {
         return obj.Id;
       });
@@ -66,10 +80,8 @@ router
         if (err) throw err;
         console.log(result);
       });
-
       let query2 =
         "SELECT Id,Email,Firstname,Middlename,Lastname,College,Verified,Gender,Birthday,PhoneNumber FROM buufia.user Where Verified = 1;";
-
       con.query(query2, (err, result) => {
         if (err) throw err;
         users = result;
@@ -84,13 +96,13 @@ router
 router
   .route("/files")
   .put(validateToken, checkRole(["Super_Admin", "Admin"]), async (req, res) => {
+    console.log(req.body);
     const { Selected, file_Id } = req.body;
     const dataToUpdate = Selected.map((user_id, index) => [
       1,
       user_id,
       file_Id,
     ]);
-    console.log(dataToUpdate);
     // Define the update query
     const updateQuery =
       "UPDATE user_files SET access = ?  WHERE user_id = ? AND file_id = ?";
@@ -124,8 +136,18 @@ router
         console.log("Transaction completed successfully");
       });
     });
-    res.redirect(req.get("referer"));
+    res.redirect(`/access/${file_Id}?status=success`);
   });
+
+router
+  .route("/files")
+  .delete(
+    validateToken,
+    checkRole(["Super_Admin", "Admin"]),
+    async (req, res) => {
+      console.log("delete Route FILE");
+    }
+  );
 
 router
   .route("/access")
@@ -137,7 +159,10 @@ router
 router
   .route("/access/:fileId")
   .get(validateToken, checkRole(["Super_Admin", "Admin"]), async (req, res) => {
-    console.log(req.params.fileId);
+    let message = "";
+    if (req.query.status) {
+      message = "Succesfully Updated";
+    }
     const user = await Return_Result(
       `SELECT Id,Email,Firstname,Middlename,Lastname,College,Verified,Gender,Birthday,PhoneNumber,access FROM buufia.user_files  INNER JOIN  files on user_files.file_id = files.file_id INNER JOIN  user on user_files.user_id = user.Id where user_files.file_id = ${req.params.fileId} and verified =1;`
     );
@@ -147,7 +172,7 @@ router
     );
     res.render("access_specific", {
       users: user,
-      errormessage: "",
+      errormessage: message,
       post: post[0],
     });
   });

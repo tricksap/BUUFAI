@@ -215,19 +215,24 @@
             <div class="container-fluid flex-grow-1 container-p-y">
               <!-- Layout Demo -->
               <div class="layout-demo-wrapper">
-                <div class="card mb-4" style="width: 100%">
-                  <div class="card-body">
-                    <h5 class="card-title"><%= result.title%></h5>
+                <% posts.forEach(post =>{ %>
 
-                    <p class="card-text" style="white-space: pre-line">
-                      <%= result.content%>
-                    </p>
-                    <a href="/public/<%= result.file_url%>" class="card-link"
-                      >Card link</a
-                    >
-                    <hr class="m-0" />
+                <div class="col-md-12 col-lg-8" style="width: 100%">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <h5 class="card-title"><%=post.title%></h5>
+                      <h5 class="card-title"><%=  new Date(post.meeting_date).toLocaleString()%></h5>
+
+                      <a
+                        href="List_Minutes/<%=post.meeting_id%>"
+                        class="btn btn-primary sasa"
+                        data-value="<%=post.access%>"
+                        >More Info</a
+                      >
+                    </div>
                   </div>
                 </div>
+                <%})%>
               </div>
               <!--/ Layout Demo -->
             </div>
@@ -295,15 +300,6 @@
     </div>
     <!-- / Layout wrapper -->
 
-    <div class="buy-now">
-      <a
-        href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/"
-        target="_blank"
-        class="btn btn-danger btn-buy-now"
-        >Upgrade to Pro</a
-      >
-    </div>
-
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>
@@ -318,6 +314,15 @@
 
     <!-- Main JS -->
     <script src="../assets/js/main.js"></script>
+
+    <script>
+      $(".sasa").each(function () {
+        var value = $(this).data("value");
+        if (value === 0) {
+          $(this).addClass("disabled");
+        }
+      });
+    </script>
 
     <!-- Page JS -->
 

@@ -64,7 +64,7 @@
     />
 
     <!-- Page CSS -->
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="styles.css" />
 
     <!-- Helpers -->
     <script src="../assets/vendor/js/helpers.js"></script>
@@ -100,45 +100,60 @@
                 </div>
                 <div class="col-12">
                   <div class="card">
-                    <h3 class="card-header"><%= post.title%></h3>
+                    <h5 class="card-header">Add New Minutes</h5>
                     <div
                       class="card-body demo-vertical-spacing demo-only-element"
                     >
                       <form
                         method="POST"
-                        action="/files?_method=PUT"
+                        action="/minutes"
+                        enctype="multipart/form-data"
                       >
+                      
                       <div class="mb-3 ">
-                    <h6 class="card-title" style="white-space: pre-line"><%= post.content%></h6>
-                        
-                      </div>
-                      <a href="/public/<%= post.file_url%>" class="card-link">File Link</a>
-                      <hr class="m-0" />
-                      <h5 class="card-title">posted by</h5>
-                     
-                      <button
-                      class="ms-2 btn btn-icon btn-outline-primary float-end "
-                      id="deleteBtn" 
-                      data-id="<%= post.file_id%>"
-                      type="button"
-                    >
-                    <span class="tf-icons bx bxs-trash "></span>
-                    </button>
-                    <button
-                      class="btn btn-icon btn-outline-primary float-end"
-                      id="inputGroupFileAddon04"
-                      type="submit"
-                      name ='file_Id'
-                      value = "<%= post.file_id%>"
-                    >
-                    <span class="tf-icons bx bxs-save"></span>
-                    </button>
-  
-                    </div>
-                    
-                    
+                        <div class="row">
+                        <div class="col-8">
+                            <label for="defaultFormControlInput" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" placeholder="Title" name="title">
+                        </div>
+                        <div class="col-4">
+                            <label for="defaultFormControlInput" class="form-label">DateTime</label>
 
-                <h5 class="card-header"><%= errormessage %> Who Can Access This File</h5>
+                            <div class="col-md-10">
+                              <input class="form-control" type="datetime-local" id="myDateTimeInput" name="DateTime">
+                            </div>
+                          </div>
+                        </div>
+
+
+                        <div>
+                          <label for="exampleFormControlTextarea1" class="form-label">Content</label>
+                          <textarea class="form-control" id="content" rows="3" name="content"></textarea>
+                        </div>
+
+                      </div>
+                        <div class="input-group">
+                          <input
+                            type="file"
+                            class="form-control"
+                            id="inputGroupFile04"
+                            aria-describedby="inputGroupFileAddon04"
+                            aria-label="Upload"
+                            name="file"
+                          />
+
+                          
+                          <button
+                            class="btn btn-outline-primary"
+                            type="submit    "
+                            id="inputGroupFileAddon04"
+                          >
+                            Submit
+                          </button>
+                        </div>
+                        
+                    </div>
+                <h5 class="card-header">Meeting Atendees</h5>
 
                     <div class="table-responsive text-nowrap">
                       <table class="table table-hover">
@@ -169,17 +184,12 @@
                             <td><%=user.College%></td>
                             
                             <td>
-                              <%if (user.access == '1'){%>
-                                <input type="checkbox" id="vehicle1" name="Selected" value="<%=user.Id%>" checked>
-                                <%}else{%>
-                                <input type="checkbox" id="vehicle1" name="Selected" value="<%=user.Id%>">
-                                <%}%>
-
+                              <input type="checkbox" id="vehicle1" name="Selected" value="<%=user.Id%>" checked>
                                 <%})%>
-                                
+                            </tbody>
+                              </table>
                             </div>
-                            
-                      </form>
+                          </form>
 
                   </div>
                 </div>
@@ -226,35 +236,17 @@
       if ($("div#status > a ").text() != "") {
         $("div#status").removeClass("invisible");
       }
+      const now = new Date();
+const year = now.getFullYear();
+const month = (now.getMonth() + 1).toString().padStart(2, '0');
+const day = now.getDate().toString().padStart(2, '0');
+const hour = now.getHours().toString().padStart(2, '0');
+const minute = now.getMinutes().toString().padStart(2, '0');
+const dateTime = `${year}-${month}-${day}T${hour}:${minute}`;
 
-      const deleteBtn = document.getElementById('deleteBtn');
-
-deleteBtn.addEventListener('click', (event) => {
-  const itemId = event.target.getAttribute('data-id');
-  fetch(`/files`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({id: itemId})
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
-  })
-  .then(data => {
-    console.log(data);
-    // Handle success response
-  })
-  .catch(error => {
-    console.error('There was a problem with the fetch operation:', error);
-    // Handle error response
-  });
-});
-
-
+// Set the input value to the current date-time
+const myDateTimeInput = document.getElementById("myDateTimeInput");
+myDateTimeInput.value = dateTime;
 
 
     </script>

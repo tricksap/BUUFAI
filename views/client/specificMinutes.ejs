@@ -228,6 +228,43 @@
                     <hr class="m-0" />
                   </div>
                 </div>
+
+                <div class="card" style="width: 100%">
+                  <h5 class="card-header">Meeting Atendees</h5>
+
+                  <div class="table-responsive text-nowrap">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>College</th>
+                          <th>Position</th>
+                          <th>Desgination</th>
+                        </tr>
+                      </thead>
+                      <tbody class="table-border-bottom-0">
+                        <% users.forEach(user =>{ %>
+
+                        <tr>
+                          <td>
+                            <i
+                              class="fab fa-angular fa-lg text-danger me-3"
+                            ></i>
+                            <strong
+                              ><%=user.Firstname%> <%=user.Middlename%>
+                              <%=user.Lastname%>
+                            </strong>
+                          </td>
+                          <td><%=user.College%></td>
+                          <td><%=user.Position%></td>
+                          <td><%=user.Designation%></td>
+
+                          <%})%>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
               <!--/ Layout Demo -->
             </div>

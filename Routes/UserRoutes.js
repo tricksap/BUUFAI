@@ -8,7 +8,7 @@ router
   .get(validateToken, checkRole(["Super_Admin"]), function (req, res) {
     let users;
     let query =
-      "SELECT Id,Email,Firstname,Middlename,Lastname,College,Verified,Gender,Birthday,PhoneNumber FROM buufia.user";
+      "SELECT Id,Email,Firstname,Middlename,Lastname,College,Verified,Gender,Birthday,PhoneNumber,Designation,Position FROM buufia.user";
 
     con.query(query, (err, result) => {
       if (err) throw err;
@@ -23,7 +23,7 @@ router
   .get(validateToken, checkRole(["Super_Admin"]), (req, res) => {
     let users;
     let query =
-      "SELECT Id,Email,Firstname,Middlename,Lastname,College,Verified,Gender,Birthday,PhoneNumber FROM buufia.user Where Verified = 0;";
+      "SELECT Id,Email,Firstname,Middlename,Lastname,College,Verified,Gender,Birthday,PhoneNumber,Designation,Position FROM buufia.user Where Verified = 0;";
 
     con.query(query, (err, result) => {
       if (err) throw err;

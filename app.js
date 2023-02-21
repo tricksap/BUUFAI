@@ -10,6 +10,7 @@ const port = 3000;
 //routes
 const UserRoutes = require("./Routes/UserRoutes");
 const FileRoutes = require("./Routes/FilesRoute");
+const minutesRoutes = require("./Routes/minutesRoutes");
 
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -68,6 +69,9 @@ app.post("/", (req, res) => {
     gender,
     birthday,
     phoneNumber,
+    position,
+
+    designation,
   } = req.body;
   let query = "INSERT INTO user SET ?";
   let data = {
@@ -80,6 +84,8 @@ app.post("/", (req, res) => {
     gender: gender,
     birthday: birthday,
     phoneNumber: phoneNumber,
+    designation: designation,
+    position: position,
     Role: "User",
   };
   con.query(query, data, (err, result) => {
@@ -180,6 +186,7 @@ app.get("/public/:filename", validateToken, (req, res) => {
 
 app.use(UserRoutes);
 app.use(FileRoutes);
+app.use(minutesRoutes);
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
