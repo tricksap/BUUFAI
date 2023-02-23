@@ -100,35 +100,44 @@
                 </div>
                 <div class="col-12">
                   <div class="card">
-                    <h5 class="card-header">Custom file input</h5>
+                    <h2 class="card-header">New General Assembly</h2>
                     <div
                       class="card-body demo-vertical-spacing demo-only-element"
                     >
                       <form
                         method="POST"
-                        action="/files"
+                        action="/GeneralAssembly"
                         enctype="multipart/form-data"
                       >
+                      
                       <div class="mb-3 ">
-                        <label for="defaultFormControlInput" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="title" placeholder="Title" name="title">
+                        <div class="row">
+                        <div class="col-8">
+                            <label for="defaultFormControlInput" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" placeholder="Title" name="title">
+                        </div>
+                        
+                        <div class="col-4">
+                            <label for="defaultFormControlInput" class="form-label">DateTime</label>
+
+                            <div class="col-md-10">
+                              <input class="form-control" type="datetime-local" id="myDateTimeInput" name="DateTime">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="">
+                            <label for="defaultFormControlInput" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="location" placeholder="Location" name="location">
+                        </div>
+
                         <div>
-                          <label for="exampleFormControlTextarea1" class="form-label">Content</label>
+                          <label for="exampleFormControlTextarea1" class="form-label">Minutes</label>
                           <textarea class="form-control" id="content" rows="3" name="content"></textarea>
                         </div>
 
                       </div>
-                        <div class="input-group">
-                          <input
-                            type="file"
-                            class="form-control"
-                            id="inputGroupFile04"
-                            aria-describedby="inputGroupFileAddon04"
-                            aria-label="Upload"
-                            name="file"
-                          />
-
-                          
+                        <div class="input-group">                          
                           <button
                             class="btn btn-outline-primary"
                             type="submit    "
@@ -139,24 +148,31 @@
                         </div>
                         
                     </div>
-                <h5 class="card-header">Who Can Access This File</h5>
+                <h4 class="card-header">Meeting Atendees</h4>
 
                     <div class="table-responsive text-nowrap">
                       <table class="table table-hover">
                         <thead>
                           <tr>
+                              <th>Last time Attended</th>
                             <th>Name</th>
-                            <th>Gender</th>
-                            <th>Email</th>
-                            <th>Contact Number</th>
                             <th>College</th>
-                            <th>Can View </th>
+                            <th>Position</th>
+                            <th>Designation</th>
+                            <th>Attended</th>
+
                           </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
                           <% users.forEach(user =>{ %>
     
                           <tr>
+                            <% if (user.last_attendance_date) { %>
+                                <td><%=new Date(user.last_attendance_date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })%></td>
+                                <% } else { %>
+                                    <td>N/A</td>
+
+                                <% } %>
                             <td>
                               <i class="fab fa-angular fa-lg text-danger me-3"></i>
                               <strong
@@ -164,16 +180,17 @@
                                 <%=user.Lastname%>
                               </strong>
                             </td>
-                            <td><%=user.Gender%></td>
-                            <td><%=user.Email%></td>
-                            <td><%=user.PhoneNumber%></td>
                             <td><%=user.College%></td>
-                            
-                              <td>
+                            <td><%=user.Position%></td>
+                            <td><%=user.Designation%></td>
+                            <td>
                                 <input type="checkbox" id="vehicle1" name="Selected" value="<%=user.Id%>" checked>
+                            </td>
                                 <%})%>
+                            </tbody>
+                              </table>
                             </div>
-                      </form>
+                          </form>
 
                   </div>
                 </div>
@@ -220,6 +237,19 @@
       if ($("div#status > a ").text() != "") {
         $("div#status").removeClass("invisible");
       }
+      const now = new Date();
+const year = now.getFullYear();
+const month = (now.getMonth() + 1).toString().padStart(2, '0');
+const day = now.getDate().toString().padStart(2, '0');
+const hour = now.getHours().toString().padStart(2, '0');
+const minute = now.getMinutes().toString().padStart(2, '0');
+const dateTime = `${year}-${month}-${day}T${hour}:${minute}`;
+
+// Set the input value to the current date-time
+const myDateTimeInput = document.getElementById("myDateTimeInput");
+myDateTimeInput.value = dateTime;
+
+
     </script>
 
     <!-- Place this tag in your head or just before your close body tag. -->

@@ -11,6 +11,7 @@ const port = 3000;
 const UserRoutes = require("./Routes/UserRoutes");
 const FileRoutes = require("./Routes/FilesRoute");
 const minutesRoutes = require("./Routes/minutesRoutes");
+const GeneralAssemblyRoutes = require("./Routes/GeneralAssemblyRoutes");
 
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -193,6 +194,7 @@ app.get("/logout", (req, res) => {
 app.use(UserRoutes);
 app.use(FileRoutes);
 app.use(minutesRoutes);
+app.use(GeneralAssemblyRoutes);
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
