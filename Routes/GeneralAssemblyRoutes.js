@@ -113,4 +113,32 @@ router
     }
   );
 
+router
+  .route("/List_GeneralAssembly/:assemblyId")
+  .get(
+    validateToken,
+    checkRole(["Super_Admin", "Admin", "User"]),
+    async (req, res) => {
+      console.log(req.params.meetingId);
+      const result = await Return_Result(
+        `SELECT * FROM buufia.general_assembly where id =${req.params.assemblyId};`
+      );
+
+      //broken query
+      const user = await Return_Result(
+        `SELECT Firstname, Middlename, Lastname, College,Designation,Position FROM buufia.user_attendance INNER JOIN user 	on user_attendance.user_id = user.id where general_assembly_id = ${req.params.assemblyId} ;`
+      );
+
+      if (result.length == 0) {
+        res.send("error 404");
+      } else {
+        console.log(user);
+        res.render("specificGeneralAssembly", {
+          result: result[0],
+          users: user,
+        });
+      }
+    }
+  );
+
 module.exports = router;

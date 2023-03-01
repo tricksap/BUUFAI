@@ -88,17 +88,26 @@
             <div class="container-fluid flex-grow-1 container-p-y">
               <!-- Layout Demo -->
               <div class="layout-demo-wrapper">
+                <h3>Meeting Minutes</h3>
                 <div class="card mb-4" style="width: 100%">
                   <div class="card-body">
                     <h5 class="card-title"><%= result.title%></h5>
 
+                    <a href="/public/<%= result.file_url%>" class="card-link">
+                      <button class="btn btn-sm btn-danger">FILE PDF</button>
+                    </a>
+
                     <p class="card-text" style="white-space: pre-line">
                       <%= result.minutes%>
                     </p>
-                    <a href="/public/<%= result.file_url%>" class="card-link"
-                      >Card link</a
-                    >
-                    <hr class="m-0" />
+
+                    <div class="mt-4">
+                      <hr class="m-0" />
+                      <small
+                        >uploaded by: <%= result.FirstName%> <%=
+                        result.LastName%></small
+                      >
+                    </div>
                   </div>
                 </div>
 

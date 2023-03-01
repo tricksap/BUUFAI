@@ -146,7 +146,7 @@ router
     async (req, res) => {
       console.log(req.params.meetingId);
       const result = await Return_Result(
-        `SELECT * FROM buufia.meeting_minutes where meeting_id =${req.params.meetingId} ;`
+        `SELECT meeting_id,meeting_date,minutes,uploaded_by,title,file_url,FirstName,LastName FROM buufia.meeting_minutes INNER JOIN admin on admin.Id =meeting_minutes.uploaded_by where meeting_id =${req.params.meetingId} ;`
       );
 
       const user = await Return_Result(

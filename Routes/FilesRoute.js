@@ -199,7 +199,7 @@ router
     async (req, res) => {
       console.log(req.params.fileId);
       const result = await Return_Result(
-        `SELECT * FROM buufia.files where file_id =${req.params.fileId} ;`
+        `SELECT file_id,file_name,file_url,uploaded_by,title,content,FirstName,MiddleName,LastName FROM buufia.files INNER JOIN admin on admin.Id =files.uploaded_by where file_id =${req.params.fileId} ;`
       );
       if (result.length == 0) {
         res.send("error 404");

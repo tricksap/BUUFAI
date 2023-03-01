@@ -127,13 +127,15 @@
 
                 <% posts.forEach(post =>{ %>
 
-                <div class="col-md-12 col-lg-8" style="width: 100%">
+                <div class="col-md-12 col-lg-8" style="width: 60%">
                   <div class="card mb-3">
                     <div class="card-body">
-                      <h5 class="card-title"><%=post.title%></h5>
-                      <h5 class="card-title">
-                        <%= new Date(post.meeting_date).toLocaleString()%>
-                      </h5>
+                      <div class="row">
+                        <h5 class="card-title col"><%=post.title%></h5>
+                        <small class="col ms-auto text-end text-muted">
+                          <%= new Date(post.meeting_date).toLocaleString()%>
+                        </small>
+                      </div>
 
                       <a
                         href="List_Minutes/<%=post.meeting_id%>"
