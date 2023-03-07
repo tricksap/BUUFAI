@@ -212,7 +212,31 @@
 
             <div class="container-fluid flex-grow-1 container-p-y">
               <!-- Layout Demo -->
-              <div class="layout-demo-wrapper"></div>
+              <div class="card mb-4">
+                <div class="d-flex align-items-end row">
+                  <div class="col-sm-12">
+                    <div class="card-body">
+                      <h5 class="card-title text-dark">Announcement</h5>
+                      <% announcements.forEach(post =>{ %>
+
+                      <h6 class="card-title mb-0 text-truncate">
+                        <a href="announcement/<%=post.id%>"><%=post.title%></a>
+                      </h6>
+                      <p class="card-text mb-2">
+                        <small class="text-muted"
+                          ><%= new Date(post.created_at).toLocaleDateString()%>
+                        </small>
+                      </p>
+                      <p class="card-text mb-1">
+                        <%= post.content.split(" ").slice(0, 50).join(" ") +
+                        "..." %>
+                      </p>
+                      <hr class="mb-3" />
+                      <%})%>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <!--/ Layout Demo -->
             </div>
             <!-- / Content -->

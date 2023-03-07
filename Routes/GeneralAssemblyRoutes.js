@@ -90,6 +90,22 @@ router
     }
   );
 
+router
+  .route("/AccessGeneralAssembly")
+  .get(
+    validateToken,
+    checkRole(["Super_Admin", "Admin", "User"]),
+    async (req, res) => {
+      const result = await Return_Result(
+        `SELECT * FROM buufia.user_attendance Inner Join general_assembly on user_attendance.general_assembly_id = general_assembly.id`
+      );
+
+      res.render("AssemblyAccess", {
+        posts: result,
+      });
+    }
+  );
+
 //all
 
 router

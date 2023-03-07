@@ -1,7 +1,6 @@
 const express = require("express");
 const { validateToken, checkRole } = require("../Helper/JWT");
 const router = express.Router();
-
 const multer = require("multer");
 const {
   Return_Result,
@@ -197,15 +196,22 @@ router
     validateToken,
     checkRole(["Super_Admin", "Admin", "User"]),
     async (req, res) => {
-      console.log(req.params.fileId);
-      const result = await Return_Result(
-        `SELECT file_id,file_name,file_url,uploaded_by,title,content,FirstName,MiddleName,LastName FROM buufia.files INNER JOIN admin on admin.Id =files.uploaded_by where file_id =${req.params.fileId} ;`
+      const access = await Return_Result(
+        `SELECT access FROM buufia.user_files where user_id = ${res.locals.userID} and file_id=${req.params.fileId} ;`
       );
-      if (result.length == 0) {
-        res.send("error 404");
+      if (access[0].access == 0) {
+        res.status(401).render("no_permissions");
       } else {
-        console.log(result);
-        res.render("specificFile", { result: result[0] });
+        console.log(req.params.fileId);
+        const result = await Return_Result(
+          `SELECT file_id,file_name,file_url,uploaded_by,title,content,FirstName,MiddleName,LastName FROM buufia.files INNER JOIN admin on admin.Id =files.uploaded_by where file_id =${req.params.fileId} ;`
+        );
+        if (result.length == 0) {
+          res.send("error 404");
+        } else {
+          console.log(result);
+          res.render("specificFile", { result: result[0] });
+        }
       }
     }
   );

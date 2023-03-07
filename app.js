@@ -1,9 +1,13 @@
 const express = require("express");
+require("dotenv").config();
+
 const ejs = require("ejs");
 const bodyParser = require("body-parser");
 const mysql = require("mysql2");
 const path = require("path");
 const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+
 const methodOverride = require("method-override");
 const port = 3000;
 
@@ -12,6 +16,14 @@ const UserRoutes = require("./Routes/UserRoutes");
 const FileRoutes = require("./Routes/FilesRoute");
 const minutesRoutes = require("./Routes/minutesRoutes");
 const GeneralAssemblyRoutes = require("./Routes/GeneralAssemblyRoutes");
+const CreateAdminRoutes = require("./Routes/createAdminRoutes");
+const CreateAnnouncement = require("./Routes/Announcement");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -114,8 +126,9 @@ app.get(
   }
 );
 
-app.get("/HomeDashboard", validateToken, (req, res) => {
-  res.render("Dashboard_Client");
+app.get("/HomeDashboard", validateToken, async (req, res) => {
+  const announcements = await Return_Result(`SELECT * FROM announcements;`);
+  res.render("Dashboard_Client", { announcements: announcements.reverse() });
 });
 
 app.get("/login", (req, res) => {
@@ -143,7 +156,7 @@ app.post("/login", (req, res) => {
         maxAge: 3 * 24 * 60 * 60 * 1000,
       });
 
-      res.render("Dashboard_Client");
+      res.redirect("/homeDashboard");
     }
   });
 });
@@ -185,6 +198,32 @@ app.get("/public/:filename", validateToken, (req, res) => {
   res.sendFile(filePath);
 });
 
+app.get("/cert", validateToken, async (req, res) => {
+  const result = await Return_Result(
+    `SELECT Firstname,Lastname FROM buufia.user where id = ${res.locals.userID}`
+  );
+  console.log(result[0].Lastname);
+
+  const url = cloudinary.url("5819472-01_hxyono", {
+    transformation: [
+      {
+        overlay: {
+          font_family: "Montserrat",
+          font_size: 100,
+          font_weight: "bold",
+          text: result[0].Firstname + " " + result[0].Lastname,
+        },
+        color: "#14b1ab",
+        effect: "colorize",
+        y: "-50",
+        width: "0.45",
+        flags: "relative",
+      },
+    ],
+  });
+  console.log(url);
+});
+
 app.get("/logout", (req, res) => {
   // clear the cookie with the name "my_cookie"
   res.clearCookie("jwt");
@@ -195,7 +234,8 @@ app.use(UserRoutes);
 app.use(FileRoutes);
 app.use(minutesRoutes);
 app.use(GeneralAssemblyRoutes);
-
+app.use(CreateAdminRoutes);
+app.use(CreateAnnouncement);
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
