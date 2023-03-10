@@ -16,7 +16,7 @@
     />
 
     <title>
-      Dashboard - Analytics | Sneat - Bootstrap 5 HTML Admin Template - Pro
+      <%= post.title%>
     </title>
 
     <meta name="description" content="" />
@@ -65,7 +65,8 @@
 
     <!-- Page CSS -->
     <link rel="stylesheet" href="/styles.css" />
-
+    <link href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css">
+    <link href="https://cdn.datatables.net/buttons/2.3.5/css/buttons.bootstrap5.min.css">
     <!-- Helpers -->
     <script src="../assets/vendor/js/helpers.js"></script>
 
@@ -92,7 +93,7 @@
           <div class="content-wrapper">
             <!-- Content -->
 
-            <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="container-xxl flex-grow-1 container-p-y" id="qwee">
               <div class="row">
                 <div id="status" class="invisible alert alert-success alert-dismissible" role="alert">
                   <a><%= errormessage %></a>
@@ -115,7 +116,16 @@
                       <a href="/public/<%= post.file_url%>" class="card-link">File Link</a>
                       <hr class="m-0" />
                       <h5 class="card-title">posted by</h5>
-                     
+                      <button
+                      class="ms-2 btn btn-icon btn-outline-primary float-end "
+                      id="export" 
+                      data-id="<%= post.file_id%>"
+                      type="button"
+                      disabled
+                    >
+                    <span class="tf-icons bx "></span>
+                    </button>
+
                       <button
                       class="ms-2 btn btn-icon btn-outline-primary float-end "
                       id="deleteBtn" 
@@ -142,8 +152,12 @@
 
                 <h5 class="card-header">Who Attended the Meeting and can access this file </h5>
 
-                    <div class="table-responsive text-nowrap">
-                      <table class="table table-hover">
+                    <div class="table-responsive text-nowrap" >
+                      <label>
+                        <input type="checkbox" id="filter-chk">
+                        Filter
+                      </label>
+                      <table class="table table-hover" id="myTable">
                         <thead>
                           <tr>
                             <th>Name</th>
@@ -224,6 +238,16 @@
     <!-- Page JS -->
     <script src="../assets/js/dashboards-analytics.js"></script>
 
+
+<script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.bootstrap5.min.js"></script>
+<link href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.13.3/b-2.3.5/b-colvis-2.3.5/b-html5-2.3.5/datatables.min.css" rel="stylesheet"/>
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.13.3/b-2.3.5/b-colvis-2.3.5/b-html5-2.3.5/datatables.min.js"></script>
     <script>
       if ($("div#status > a ").text() != "") {
         $("div#status").removeClass("invisible");
@@ -255,6 +279,53 @@ deleteBtn.addEventListener('click', (event) => {
     // Handle error response
   });
 });
+
+// var table = $('#myTable');
+// $(document).ready(function() {
+//     table.DataTable( {
+//         dom: 'SBflrtip',
+        
+//     } );
+    
+// } );
+
+
+
+// $('#filter-chk').on('click', function () {
+//   if ($(this).is(':checked')) {
+//     table.DataTable().rows(':not(:has(:checkbox:checked))').nodes().to$().hide();
+//   } else {
+//     table.rows().nodes().to$().show();
+//   }
+// });
+
+$(document).ready(function() {
+  var table = $('#myTable').DataTable({
+    dom: 'SBflrtip',
+    buttons: [
+    'copy',"excel","pdf",
+    
+    ]
+  });
+
+  $('#filter-chk').on('click', function () {
+    if ($(this).is(':checked')) {
+      table.rows(':not(:has(:checkbox:checked))').nodes().to$().hide();
+    } else {
+      table.rows().nodes().to$().show();
+    }
+  });
+
+  $('#export-btn').on('click', function () {
+    var filteredData = table.rows({filter: 'applied'}).data();
+    var dataString = JSON.stringify(filteredData);
+
+    // Export data as file
+    var file = new Blob([dataString], {type: 'text/plain;charset=utf-8'});
+    saveAs(file, 'filtered_data.txt');
+  });
+});
+
 
 
 

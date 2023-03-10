@@ -112,6 +112,11 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/client/BUUFAI.html");
 });
 
+app.get("/announcement", async (req, res) => {
+  const announcements = await Return_Result(`SELECT * FROM announcements;`);
+  res.render("announcementPage", { announcements: announcements });
+});
+
 app.get("/register", (req, res) => {
   res.sendFile(__dirname + "/views/client/Registration.html");
 });

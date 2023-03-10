@@ -135,9 +135,7 @@
                 <div class="navbar-nav ms-auto text-center">
                   <a class="nav-item nav-link" href="/">Home</a>
 
-                  <a class="nav-item nav-link" href="/announcement"
-                    >Announcement</a
-                  >
+                  <a class="nav-item nav-link" href="/">Announcement</a>
 
                   <a class="nav-item nav-link" href="/">Guidelines</a>
 
@@ -192,84 +190,31 @@
           <!-- Content wrapper -->
 
           <div class="content-wrapper">
-            <div class="container flex-grow-1 container-p-y">
-              <div class="container">
-                <div class="row">
-                  <div class="col">
-                    <h1>About</h1>
-                    <div>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Fusce ligula ex, rutrum a elit ut, dapibus cursus tortor.
-                      Praesent nec sagittis tortor. In et dolor purus.
-                      Suspendisse auctor, sem quis pharetra semper, tellus nisl
-                      iaculis tellus, vitae efficitur enim purus nec ante.
-                      Phasellus vulputate purus dui, id interdum lorem euismod
-                      a. Nulla efficitur purus et dui sodales, vitae tempor eros
-                      pharetra. Phasellus hendrerit, lorem sed consectetur
-                      tincidunt, erat turpis tempus lorem, vel rutrum lorem
-                      lacus a leo. Suspendisse semper dui quis libero porttitor
-                      laoreet id vitae nunc. Mauris sed leo cursus tortor
-                      iaculis viverra. In hac habitasse platea dictumst. Aliquam
-                      erat volutpat. Fusce ultricies dui lectus, nec fringilla
-                      metus imperdiet eu. Donec cursus accumsan tincidunt. Class
-                      aptent taciti sociosqu ad litora torquent per conubia
-                      nostra, per inceptos himenaeos. In eget sodales libero. In
-                      tincidunt ultricies eros, eget faucibus augue volutpat a.
-                      Suspendisse ultricies eget nibh id pretium. Nulla in nisi
-                      lacinia, imperdiet tellus vitae, feugiat leo.
-                    </div>
-                    <button type="button" class="btn btn-info btn-buy-now">
-                      Read More
-                    </button>
-                  </div>
-                  <div class="col">
-                    <img
-                      src="./Images/Bicolu-1326e890.jpg"
-                      alt=""
-                      class="img-fluid"
-                    />
+            <div class="card m-5">
+              <div class="d-flex align-items-end row">
+                <div class="col-sm-12">
+                  <div class="card-body">
+                    <h5 class="card-title text-dark">Announcement</h5>
+                    <% announcements.forEach(post =>{ %>
+
+                    <h6 class="card-title mb-0 text-truncate">
+                      <a href="announcement/<%=post.id%>"><%=post.title%></a>
+                    </h6>
+                    <p class="card-text mb-2">
+                      <small class="text-muted"
+                        ><%= new Date(post.created_at).toLocaleDateString()%>
+                      </small>
+                    </p>
+                    <p class="card-text mb-1">
+                      <%= post.content.split(" ").slice(0, 50).join(" ") + "..."
+                      %>
+                    </p>
+                    <hr class="mb-3" />
+                    <%})%>
                   </div>
                 </div>
               </div>
             </div>
-
-            <div class="container">
-              <div class="rounded apply">
-                <div class="row">
-                  <h1 id="apply">Apply</h1>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Proin ut lorem et tortor pretium vehicula ut at urna.
-                    Pellentesque tristique ipsum sit amet vehicula tristique.
-                    Quisque pretium scelerisque mauris, eget aliquet sem dictum
-                    quis. Suspendisse eget ipsum sed orci rhoncus pharetra a at
-                    sapien. Proin tellus elit, consectetur nec tellus vitae,
-                    malesuada viverra metus. Nulla varius ante a arcu
-                    pellentesque, sed cursus nisl condimentum. Integer tempus
-                    non eros vitae aliquet. In eget cursus nisl. Donec rutrum
-                    enim ac dui tincidunt, quis commodo mauris ultrices. Cras
-                    eget sapien convallis, lobortis libero et, vehicula sem. Nam
-                    efficitur ligula et tristique eleifend. Pellentesque a magna
-                    non nulla scelerisque sollicitudin. Vivamus vitae interdum
-                    magna. Praesent dignissim venenatis tristique. Maecenas
-                    vehicula mi a mi sagittis porta. Ut ut ante sed ligula
-                    volutpat volutpat sit amet non massa. Mauris egestas, libero
-                    sit amet hendrerit iaculis, velit augue mollis nisl, ut
-                    viverra ligula arcu sagittis eros. Aliquam.
-                  </p>
-                  <div class="col-4">
-                    <button
-                      type="button"
-                      class="btn btn-outline-light btn-lg order"
-                      onclick="location.href = '/register';"
-                    >
-                      Apply Now
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <!-- / Content -->
 
             <!-- Footer -->
