@@ -18,6 +18,7 @@ const minutesRoutes = require("./Routes/minutesRoutes");
 const GeneralAssemblyRoutes = require("./Routes/GeneralAssemblyRoutes");
 const CreateAdminRoutes = require("./Routes/createAdminRoutes");
 const CreateAnnouncement = require("./Routes/Announcement");
+const PaymentsRoutes = require("./Routes/PaymentsRoutes");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -241,6 +242,7 @@ app.use(minutesRoutes);
 app.use(GeneralAssemblyRoutes);
 app.use(CreateAdminRoutes);
 app.use(CreateAnnouncement);
+app.use(PaymentsRoutes);
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });

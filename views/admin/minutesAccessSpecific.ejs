@@ -308,22 +308,7 @@ $(document).ready(function() {
     ]
   });
 
-  $('#filter-chk').on('click', function () {
-    if ($(this).is(':checked')) {
-      table.rows(':not(:has(:checkbox:checked))').nodes().to$().hide();
-    } else {
-      table.rows().nodes().to$().show();
-    }
-  });
-
-  $('#export-btn').on('click', function () {
-    var filteredData = table.rows({filter: 'applied'}).data();
-    var dataString = JSON.stringify(filteredData);
-
-    // Export data as file
-    var file = new Blob([dataString], {type: 'text/plain;charset=utf-8'});
-    saveAs(file, 'filtered_data.txt');
-  });
+  
 });
 
 
