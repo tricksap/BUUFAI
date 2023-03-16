@@ -56,8 +56,33 @@ router
 
     if (req.query.user) {
       const last_payment_date = await Return_Result(
-        `SELECT MAX(created_at) as last_payment_date FROM monthly_payments WHERE user_id = ${req.query.user}`
+        `SELECT * FROM monthly_payments WHERE user_id = ${req.query.user}`
       );
+      // console.log(last_payment_date);
+      const userPayments = {
+        userId: 6,
+        payments: [],
+      };
+
+      // Initialize the `payments` array with all months marked as unpaid
+      for (let i = 1; i <= 12; i++) {
+        userPayments.payments.push({ month: i, year: 2023, status: "unpaid" });
+      }
+
+      // Assume that `rows` is the array of rows retrieved from the MySQL query
+
+      last_payment_date.forEach((row) => {
+        const month = parseInt(row.month);
+        console.log(row.month);
+        const year = parseInt(row.year);
+        const paymentIndex = userPayments.payments.findIndex((payment) => {
+          return payment.month === month && payment.year === year;
+        });
+        if (paymentIndex !== -1) {
+          userPayments.payments[paymentIndex].status = "paid";
+        }
+      });
+      console.log(userPayments);
     }
 
     res.render("NewPayment", { errormessage: "", users: users, query: "7" });

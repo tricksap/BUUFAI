@@ -88,32 +88,49 @@
             <div class="container-fluid flex-grow-1 container-p-y">
               <!-- Layout Demo -->
 
-              <div class="layout-demo-wrapper">
-                <h3>General Assembly</h3>
+              <div class="card">
+                <h5 class="card-header">General Assembly</h5>
+                <div class="card-body">
+                  <div class="table-responsive text-nowrap">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Title</th>
+                          <th>Location</th>
+                          <th>Date</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% posts.forEach(post =>{ %>
 
-                <% posts.forEach(post =>{ %>
+                        <tr>
+                          <td>
+                            <i
+                              class="fab fa-angular fa-lg text-danger me-3"
+                            ></i>
+                            <strong> <%=post.title%></strong>
+                          </td>
+                          <td><%=post.location%></td>
+                          <td>
+                            <%= new Date(post.date).toLocaleDateString()%>
+                          </td>
 
-                <div class="col-md-12 col-lg-8" style="width: 60%">
-                  <div class="card mb-3">
-                    <div class="card-body">
-                      <div class="row">
-                        <h5 class="card-title col"><%=post.title%></h5>
-                        <small class="col ms-auto text-end text-muted">
-                          <%= new Date(post.date).toLocaleString()%>
-                        </small>
-                      </div>
-
-                      <a
-                        href="/List_GeneralAssembly/<%=post.id%>"
-                        class="btn btn-primary sasa"
-                        data-value="<%=post.access%>"
-                        >More Info</a
-                      >
-                    </div>
+                          <td>
+                            <a
+                              href="/List_GeneralAssembly/<%=post.id%>"
+                              class="btn btn-icon btn-outline-primary bx bx-show"
+                              data-value="<%=post.access%>"
+                            ></a>
+                          </td>
+                        </tr>
+                        <%})%>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
-                <%})%>
               </div>
+
               <!--/ Layout Demo -->
             </div>
             <!-- / Content -->

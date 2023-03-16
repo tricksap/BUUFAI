@@ -44,7 +44,7 @@ router
   .route("/Minutes_access")
   .get(validateToken, checkRole(["Super_Admin", "Admin"]), async (req, res) => {
     const result = await Return_Result(`SELECT * FROM buufia.meeting_minutes;`);
-    res.render("minutesAccess", { posts: result });
+    res.render("minutesAccess", { posts: result.reverse() });
   });
 router
   .route("/minutes_Access/:meetingId")

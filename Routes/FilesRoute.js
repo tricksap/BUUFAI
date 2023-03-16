@@ -61,7 +61,7 @@ router
       console.log(originalname1);
       //add new file row
       const latestInsertedId = await Insert_A_File_Return_Id(
-        `INSERT INTO files (title, content,file_name, file_url, uploaded_by) VALUES("${title}","${content}","${originalname1}", "${filename1}", "${res.locals.userID}");`
+        `INSERT INTO files (title, content,file_name, file_url, uploaded_by,date) VALUES("${title}","${content}","${originalname1}", "${filename1}", "${res.locals.userID}",NOW());`
       );
       let userId = await Return_Result(
         "SELECT Id FROM buufia.user where verified = 1;"
@@ -152,7 +152,7 @@ router
   .route("/access")
   .get(validateToken, checkRole(["Super_Admin", "Admin"]), async (req, res) => {
     const result = await Return_Result(`SELECT * FROM buufia.files;`);
-    res.render("access", { posts: result });
+    res.render("access", { posts: result.reverse() });
   });
 
 router
