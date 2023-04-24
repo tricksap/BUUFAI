@@ -10,6 +10,7 @@ const {
 const mysql = require("mysql2");
 const path = require("path");
 const { compareArrays } = require("../Helper/ArrayCompare");
+const { count } = require("console");
 
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -53,20 +54,39 @@ router
     const users = await Return_Result(
       `SELECT Id,Firstname,Middlename,Lastname FROM buufia.user Where Verified = 1;`
     );
+    const userPayments = {
+      userId: 6,
+      payments: [],
+    };
 
     if (req.query.user) {
       const last_payment_date = await Return_Result(
         `SELECT * FROM monthly_payments WHERE user_id = ${req.query.user}`
       );
-      // console.log(last_payment_date);
-      const userPayments = {
-        userId: 6,
-        payments: [],
-      };
+
+      const monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
 
       // Initialize the `payments` array with all months marked as unpaid
       for (let i = 1; i <= 12; i++) {
-        userPayments.payments.push({ month: i, year: 2023, status: "unpaid" });
+        userPayments.payments.push({
+          month: i,
+          year: 2023,
+          status: "unpaid",
+          monthName: monthNames[i - 1],
+        });
       }
 
       // Assume that `rows` is the array of rows retrieved from the MySQL query
@@ -80,12 +100,18 @@ router
         });
         if (paymentIndex !== -1) {
           userPayments.payments[paymentIndex].status = "paid";
+          userPayments.payments[paymentIndex].date = row.created_at;
         }
       });
-      console.log(userPayments);
     }
 
-    res.render("NewPayment", { errormessage: "", users: users, query: "7" });
+    console.log(userPayments);
+    res.render("NewPayment", {
+      errormessage: "",
+      users: users,
+      query: req.query,
+      userPayments: userPayments,
+    });
   });
 
 router
@@ -94,13 +120,17 @@ router
     validateToken,
     checkRole(["Super_Admin", "Admin"]),
     async (req, res) => {
-      const { user, month, num_months, amount } = req.body;
+      let { user, month, num_months, amount } = req.body;
       let amountInt = parseInt(amount);
-      const created = await Return_Result(
-        `INSERT INTO buufia.monthly_payments (user_id, month, year, paid, created_at) VALUES ("${user}", "${month}", YEAR(CURDATE()), ${amountInt}, NOW());`
-      );
-
-      console.log(created);
+      for (let i = 0; i < num_months; i++) {
+        month = parseInt(month, 10);
+        const created = await Return_Result(
+          `INSERT INTO buufia.monthly_payments (user_id, month, year, paid, created_at) VALUES ("${user}", "${month}", YEAR(CURDATE()), ${amountInt}, NOW());`
+        );
+        month += 1;
+        console.log(created);
+      }
+      res.redirect(req.get("referer"));
     }
   );
 

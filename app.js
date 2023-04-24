@@ -7,7 +7,7 @@ const mysql = require("mysql2");
 const path = require("path");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
-
+const PDFDocument = require("pdfkit");
 const methodOverride = require("method-override");
 const port = 3000;
 
@@ -131,6 +131,68 @@ app.get(
     res.render("Dashboard");
   }
 );
+
+
+app.get('/invoice', (req, res) => {
+	const data = {
+		month: '2',
+		year: '2023',
+		paid: '300',
+		created_at: '2023-03-17 14:44:22',
+		email: 'oo@gmail.com',
+		firstname: 'oo',
+		middlename: 'oo',
+		lastname: 'oo',
+		college: 'CIT',
+		invoiceNumber: '123',
+		items: [
+			{
+				description: 'Item 1',
+				qty: 1,
+				price: 10,
+				amount: 10
+			},
+			{
+				description: 'Item 2',
+				qty: 2,
+				price: 20,
+				amount: 40
+			},
+			{
+				description: 'Item 3',
+				qty: 3,
+				price: 30,
+				amount: 90
+			}
+		]
+	};
+
+	// Calculate total amount and balance due
+	data.totalAmount = data.items.reduce((acc, item) => acc + item.amount, 0);
+	data.balanceDue = data.totalAmount - data.paid;
+
+	// Render the EJS template
+	ejs.renderFile('views/invoice.ejs', data, (err, html) => {
+		if (err) {
+			console.log(err);
+			return res.status(500).send(err);
+		}
+
+		// Generate PDF from HTML
+		pdf.create(html).toBuffer((err, buffer) => {
+			if (err) {
+				console.log(err);
+				return res.status(500).send(err);
+			}
+
+			// Send the PDF as a response
+			res.setHeader('Content-Type', 'application/pdf');
+			res.setHeader('Content-Disposition', `attachment; filename=invoice_${data.invoiceNumber}.pdf`);
+			res.send(buffer);
+		});
+	});
+});
+
 
 app.get("/HomeDashboard", validateToken, async (req, res) => {
   const announcements = await Return_Result(`SELECT * FROM announcements;`);
