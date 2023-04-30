@@ -1,10 +1,11 @@
 # BUUFAI
 
-Technology used:
-Node.js (express framework)
+Technology used:\
+Node.js (express framework)\
 Mysql
 
 
-steps
-Setup .env file
-Npm install
+steps\
+Setup .env file\
+npm install\
+nodemon app.js or node app.js
